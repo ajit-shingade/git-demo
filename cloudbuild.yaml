@@ -53,3 +53,19 @@ steps:
     volumes:
       - name: "BuildTag"
         path: /workspace/buildTagName/
+  # Deploy container image to Cloud Run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: bash
+    id: "container_deploy"
+    args:
+      - -c
+      - |
+        gcloud config set project ajit-gcd-project &&
+        echo "User : "
+        gcloud auth list &&
+        gcloud config set account '1028607869101@cloudbuild.gserviceaccount.com'
+        BuildTag=$(cat /workspace/buildTagName//BuildTag.txt) &&
+        gcloud run deploy ajit-gcd-project --image=eu.gcr.io/ajit-gcd-project/git-demo:${BuildTag} --region=europe-west1 --platform=managed --no-allow-unauthenticated
+    volumes:
+      - name: "BuildTag"
+        path: /workspace/buildTagName/
