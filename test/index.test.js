@@ -25,7 +25,7 @@ describe('Unit Tests', () => {
 
   it('Service uses the NAME override', async () => {
     process.env.NAME = 'Cloud';
-    const response = await request.get('/').expect(200);
+    const response = await request.get('/').expect(201);
     assert.equal(response.text, 'Hello Cloud!');
   });
 
