@@ -1,0 +1,30 @@
+timeout: 7200s
+
+steps:
+  - name: "gcr.io/cloud-builders/git"
+    entrypoint: "bash"
+    id: utilscript
+    args:
+      - "util.sh"
+    env:
+      - "BUILD_ID=$BUILD_ID"
+      - "PROJECT_ID=$PROJECT_ID"
+      - "REVISION_ID=$REVISION_ID"
+      - "BRANCH_NAME=$BRANCH_NAME"
+      - "SHORT_SHA=$SHORT_SHA"
+      - "REPO_NAME=$REPO_NAME"
+  # Install dependencies
+  - name: node
+    entrypoint: yarn
+    args: ["install"]
+  # Run tests
+  - name: node
+    entrypoint: yarn
+    args: ["test"]
+  - name: "gcr.io/cloud-builders/docker"
+    entrypoint: "bash"
+    id: docker_build
+    args:
+      - -c
+      - |
+        docker build -t eu.gcr.io/ingka-cop-solver-prod/git-demo:latest .
