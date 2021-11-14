@@ -13,6 +13,9 @@ steps:
       - "BRANCH_NAME=$BRANCH_NAME"
       - "SHORT_SHA=$SHORT_SHA"
       - "REPO_NAME=$REPO_NAME"
+    volumes:
+      - name: "BuildTag"
+        path: /workspace/
   # Install dependencies
 
   - name: node
@@ -32,5 +35,21 @@ steps:
     args:
       - -c
       - |
-        docker build -t eu.gcr.io/ingka-cop-solver-prod/git-demo:latest .
+        BuildTag=$(cat /workspace/BuildTag.txt) &&
+        docker build -t eu.gcr.io/ajit-gcd-project/git-demo:${BuildTag} .
         docker images
+    volumes:
+      - name: "BuildTag"
+        path: /workspace/
+  # image push
+  - name: "gcr.io/cloud-builders/docker"
+    entrypoint: "bash"
+    id: docker_push
+    args:
+      - -c
+      - |
+        BuildTag=$(cat /workspace/BuildTag.txt) &&
+        docker push eu.gcr.io/ajit-gcd-project/git-demo:${BuildTag}
+    volumes:
+      - name: "BuildTag"
+        path: /workspace/
