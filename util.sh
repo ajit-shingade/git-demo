@@ -8,6 +8,6 @@ echo "REPO_NAME:   $REPO_NAME"
 echo "File:        $File"
 
 BuildTag=1.0.0_${SHORT_SHA}
-echo ${BuildTag} > /workspace/BuildTag.txt
+echo ${BuildTag} > /workspace/buildTagName/BuildTag.txt
 echo -n "Building docker image tag "
-cat /workspace/BuildTag.txt
+cat /workspace/buildTagName/BuildTag.txt
