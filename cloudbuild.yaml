@@ -14,13 +14,18 @@ steps:
       - "SHORT_SHA=$SHORT_SHA"
       - "REPO_NAME=$REPO_NAME"
   # Install dependencies
+
   - name: node
     entrypoint: yarn
+    id: install
     args: ["install"]
+
   # Run tests
   - name: node
     entrypoint: yarn
+    id: test
     args: ["test"]
+
   - name: "gcr.io/cloud-builders/docker"
     entrypoint: "bash"
     id: docker_build
@@ -28,3 +33,4 @@ steps:
       - -c
       - |
         docker build -t eu.gcr.io/ingka-cop-solver-prod/git-demo:latest .
+        docker images
