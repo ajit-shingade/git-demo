@@ -15,7 +15,7 @@ steps:
       - "REPO_NAME=$REPO_NAME"
     volumes:
       - name: "BuildTag"
-        path: /workspace/
+        path: /workspace/buildTagName/
   # Install dependencies
 
   - name: node
@@ -35,12 +35,12 @@ steps:
     args:
       - -c
       - |
-        BuildTag=$(cat /workspace/BuildTag.txt) &&
+        BuildTag=$(cat /workspace/buildTagName/BuildTag.txt) &&
         docker build -t eu.gcr.io/ajit-gcd-project/git-demo:${BuildTag} .
         docker images
     volumes:
       - name: "BuildTag"
-        path: /workspace/
+        path: /workspace/buildTagName/
   # image push
   - name: "gcr.io/cloud-builders/docker"
     entrypoint: "bash"
@@ -48,8 +48,8 @@ steps:
     args:
       - -c
       - |
-        BuildTag=$(cat /workspace/BuildTag.txt) &&
+        BuildTag=$(cat /workspace/buildTagName/BuildTag.txt) &&
         docker push eu.gcr.io/ajit-gcd-project/git-demo:${BuildTag}
     volumes:
       - name: "BuildTag"
-        path: /workspace/
+        path: /workspace/buildTagName/
